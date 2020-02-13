@@ -17,8 +17,6 @@ fnValidate=['fblhoe.vhdr', 'fblhce.vhdr', 'fbrhoe.vhdr', 'fbrhce.vhdr','jmlhoe.v
 
 #filenames=['jllhoe.vhdr']
 
-data_path='C:\\Users\\mochu\\Desktop\\pythonscript\\data\\'
-
 bandpass=[]
 event_id=dict(res=1,act=2,end=4,start=8)
 tmin, tmax = -2.0, 0.5
@@ -54,29 +52,30 @@ def eeg_processing(ei,fn):
     chan2=['C3']
     chan2_idx=chan2idx(chan2)
     
-    #zápis počtu epoch
+    #writing numbers of epochs
     #f1= open("numbersOfEpochs.txt","w+") 
     
-    #Načtení dat a vybrání epoch
+    #loading dataset and select epochs
     for file in filenames:
         if file[2] == 'l':
             chan = chan1_idx.copy()
         else:
             chan = chan2_idx.copy()
         names=[]
+        #replace "EEG\\" with your data path
         eeg.append(mne.io.read_raw_brainvision("EEG\\"+file))
         eeg[i].load_data()
        
         names.append(eeg[i].ch_names) 
         
-        #příprava dat pro ers
+        #data preprocesing for ERS
         ers = eeg[i].copy()
         ers.filter(14,22,fir_design="firwin")
         ers.apply_function(square)
         epochsERS.append(mne.Epochs(ers, mne.find_events(ers), event_id=ei, tmin=-2.0, tmax=0.5,baseline=None, preload=True, picks=chan))
         #epochsERS[i].plot()
         
-        #příprava dat pro erd
+        #data preprocesing for ERD
         eeg[i].filter(8,12,fir_design="firwin")
         eeg[i].apply_function(square)
         epochsERD.append(mne.Epochs(eeg[i], mne.find_events(eeg[i]), event_id=ei, tmin=-2.0, tmax=0.5,baseline=None, preload=True, picks=chan))
@@ -90,7 +89,7 @@ def eeg_processing(ei,fn):
     else:
         f2= open(output,"a+")
         
-    #Zprůměrování dat a finální výpočet ERD/ERS    
+    #Data averaging and final calculation of ERD / ERS   
     for i in range(len(epochsERD)):
         epochsERD[i] = epochsERD[i].average()
         #epochsERD[i].plot()

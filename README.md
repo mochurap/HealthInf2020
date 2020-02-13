@@ -1,7 +1,4 @@
-# HealthInf2020
-
-
-User Manual
+# HealthInf2020 - User Manual
 
 
 There are two applications called erders.py and unn.py. Both applications have been developed and tested in python version 3.6.8 therefore, it is appropriate to run applications in this version of python. You must also have the needed packages installed.For the erders.py file, these are the "numpy" and "mne" packages. For the unn.py file, these are the "numpy", "pandas", and "keras" packages.
